@@ -1,0 +1,36 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Canvas Game</title>
+    <style>
+        body {
+            background: black;
+        }
+    </style>
+</head>
+<body>
+    <div id="timerDisplay"></div>
+    <canvas id="gamecanvas"></canvas>
+    <script src="Ui.js"></script>
+    
+    <script>
+
+
+        function clearcanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function gameLoop() {
+            clearcanvas();
+            startPage();
+            infoPage();
+    
+        }
+
+
+
+        setInterval(gameLoop, TimeInterval);
+
+    </script>
+</body>
+</html>

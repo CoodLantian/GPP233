@@ -1,0 +1,12 @@
+ if (this.pos.x < 0) {
+                this.pos.x = 0;
+            }
+            if (this.pos.x + this.size.width > canvas.width) {
+                this.pos.x = canvas.width - this.size.width;
+            }
+            if (this.pos.y < 0) {
+                this.pos.y = 0;
+            }
+            if (this.pos.y + this.size.height > canvas.height) {
+                this.pos.y = canvas.height - this.size.height;
+            }

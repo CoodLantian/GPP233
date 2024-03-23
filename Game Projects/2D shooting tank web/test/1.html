@@ -1,0 +1,107 @@
+const canvas = document.querySelector('canvas');
+const ctx = canvas.getContext('2d');
+const FrameRate = 30;
+canvas.width = 1024;
+canvas.height = 576;
+const TimeInterval = 1000 / FrameRate;
+class Tank
+{
+    constructor Tank(T_size, T_position, B_size, T_color) // T = tank ,B = tank barrel
+    {
+        this.T_size = T_size
+        {
+            width: 200,
+            height: 200
+        };
+        this.baseColor = T_color;
+        this.T_position = T_position;
+        this.BarrelColor = "blue";
+        this.centerX = this.T_position.x + (this.T_size.width / 2);
+        this.centerY = this.T_position.y + (this.T_size.height / 2);
+        this.rotateSpeed = 20;
+        this.rotateLeft = false;
+        this.rotateRight = false;
+        this.B_size = B_size
+        {
+            B_width: 50,
+            B_height: 150
+        };
+        this.rotateAngle = 270;
+    }
+
+Draw(ctx)
+{
+    //Tank Base
+    ctx.fillStyle = this.baseColor;
+    ctx.fillRect = (this.T_position.x, this.centerY, this.T_size.width, this.T_size.height);
+
+    //circular base for barrel this.BarrelColor
+    ctx.fillStyle = this.BarrelColor;
+    ctx.beginpath();
+    ctx.arc(this.centerX, this.centerY, this.centerX, Math.PI);
+    ctx.closePath();
+    ctx.fillStyle = this.baseColor;
+    ctx.fill();
+
+    //Save and transform state
+    ctx.save();
+    ctx.translate(this.centerX, this.centerY); // Move the coordinate system to the tank's center
+    ctx.rotate(Math.PI * this.rotateAngle / 180); // Rotate the turret
+    ctx.fillStyle = this.turretColor;
+    ctx.fillRect = (-(this.B_size.width / 2), 0, this.B_size.width, this.B_size.height);
+    ctx.restore();
+
+    // Draw circular top part of the turret
+    ctx.fillStyle = this.BarrelColor;
+    ctx.beginpath();
+    ctx.arc(this.centerX, this.centerY, this.B_size.width / 2, 0, 2 * Math.PI);
+    ctx.closePath();
+    ctx.fill();
+}
+
+Draw(ctx)
+{
+    this.drawTank(ctx);
+    this.turretRotation();
+}
+
+turretRotation()
+{
+    if (this.rotateRight) {
+        this.rotateAngle += (Math.PI / 180) * 2; // Rotate by 2 degrees to the right
+    }
+    if (this.rotateLeft) {
+        this.rotateAngle -= (Math.PI / 180) * 2; // Rotate by 2 degrees to the left
+    }
+}
+}
+
+function draw()
+{
+    ctx.clearRect(0, 0, tankCanvas.width, tankCanvas.height);
+    tank.update(ctx);
+    requestAnimationFrame(draw);
+}
+
+window.addEventListener("keydown", (event) =>
+{
+    if (event.keyCode === 37)
+    {
+        tank.rotateLeft = true;
+    } else if (event.keyCode === 39)
+    {
+        tank.rotateRight = true;
+    }
+});
+
+window.addEventListener("keyup", (event) =>
+{
+    if (event.keyCode === 37)
+    {
+        tank.rotateLeft = false;
+    } else if (event.keyCode === 39)
+    {
+        tank.rotateRight = false;
+    }
+});
+

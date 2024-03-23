@@ -1,0 +1,60 @@
+﻿<html>
+<style>
+    body {
+        background: black;
+    }
+</style>
+<div id="timerDisplay"></div>
+<canvas id="gamecanvas"></canvas>
+<script src="game.js"></script>
+<script src="target.js"></script>
+<script src="score.js"></script>
+<script src="Timer.js"></script>
+<script>
+
+    const score = new Score();
+    const gameTimer = new Timer();
+
+   
+    let gameStarted = false;
+
+    function UpdateGame() {
+        if (!gameStarted) {
+            ctx.font = "30px Arial";
+            ctx.fillStyle = "white";
+
+        const textX = canvas.width / 2 - ctx.measureText("Press Space Bar to Start").width / 2;
+        const textY = canvas.height / 2 - 20;
+
+            ctx.fillText("Press Space Bar to Start", textX, textY);
+            ctx.font = "20px Arial";
+
+        const instructionsX = canvas.width / 2 - ctx.measureText("Use Arrow Keys to Play").width / 2;
+
+            ctx.fillText("Use Arrow Keys to Play", instructionsX, textY + 40);
+            ctx.fillText("→: Move Right, ←: Move Left", instructionsX - 40, textY + 80);
+        } else {
+            // Game logic when the game has started
+            clearcanvas();
+            PlayerData();
+            BombUpdate();
+            redBallsUpdate();
+            gameMechanics();
+            gameTimer.updateTimer();
+            score.drawScore(ctx);
+        }
+    }
+
+    function clearcanvas() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    
+    function gameLoop() {       
+        UpdateGame();
+    }
+
+   
+    setInterval(gameLoop, TimeInterval);
+</script>
+</html>

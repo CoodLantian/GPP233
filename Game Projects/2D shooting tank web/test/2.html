@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            background: black;
+            margin: 0;
+        }
+
+        canvas {
+            display: block;
+            margin: 0 auto;
+            border: 1px solid white;
+        }
+    </style>
+    <title>Tank Game</title>
+</head>
+<body>
+
+<canvas id="myCanvas"></canvas>
+<script>
+    const canvas = document.getElementById('myCanvas');
+    const ctx = canvas.getContext('2d');
+    const FrameRate = 30;
+    canvas.width = 1024;
+    canvas.height = 576;
+    const TimeInterval = 1000 / FrameRate;
+
+    class Tank {
+        constructor(position, width, height, baseColor, turretColor, turretWidth, turretHeight) {
+            this.position = position;
+            this.baseColor = baseColor;
+            this.turretColor = turretColor;
+            this.width = width;
+            this.height = height;
+            this.turretHeight = turretHeight;
+            this.turretWidth = turretWidth;
+            this.centerX = this.position.x + (this.width / 2);
+            this.centerY = this.position.y + (this.height / 2);
+            this.rotationAngle = 0;
+            this.moveSpeed = 5;
+
+            this.rotateRight = false;
+            this.rotateLeft = false;
+        }
+
+        Draw(ctx) {
+            ctx.save();
+            ctx.translate(this.centerX, this.centerY);
+            ctx.rotate(this.rotationAngle);
+            ctx.fillStyle = this.baseColor;
+            ctx.fillRect(-this.width / 2, -this.height / 2, this.width, this.height);
+
+            ctx.fillStyle = this.turretColor;
+            ctx.beginPath();
+            ctx.arc(0, 0, this.width / 2, Math.PI, 2 * Math.PI);
+            ctx.closePath();
+            ctx.fillStyle = this.baseColor;
+            ctx.fill();
+
+            ctx.save();
+            ctx.rotate((Math.PI * 270) / 180);
+            ctx.fillStyle = this.turretColor;
+            ctx.fillRect(-(this.turretWidth / 2), 0, this.turretWidth, this.turretHeight);
+            ctx.restore();
+
+            ctx.fillStyle = this.turretColor;
+            ctx.beginPath();
+            ctx.arc(0, 0, this.turretWidth / 2, 0, 2 * Math.PI);
+            ctx.closePath();
+            ctx.fill();
+
+            ctx.restore();
+        }
+
+        Update() {
+            this.Draw(ctx);
+            this.turret_rotation();
+        }
+
+        turret_rotation() {
+            if (this.rotateRight) {
+                this.rotationAngle += (Math.PI / 180) * 2; // Rotate by 2 degrees to the right
+            }
+            if (this.rotateLeft) {
+                this.rotationAngle -= (Math.PI / 180) * 2; // Rotate by 2 degrees to the left
+            }
+        }
+    }
+
+    const turret = new Tank({ x: 50, y: 490 }, 130, 30, "red");
+    const tank = new Tank({ x: 0, y: 480 }, 100, 100, "blue");
+
+    window.addEventListener("keydown", (event) => {
+        if (event.keyCode === 37) {
+            turret.rotateLeft = true;
+        } else if (event.keyCode === 39) {
+            turret.rotateRight = true;
+        }
+    });
+
+    window.addEventListener("keyup", (event) => {
+        if (event.keyCode === 37) {
+            turret.rotateLeft = false;
+        } else if (event.keyCode === 39) {
+            turret.rotateRight = false;
+        }
+    });
+
+    function ClearCanvas() {
+        ctx.fillStyle = 'white';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
+
+    function GameLoop() {
+        ClearCanvas();
+        tank.Draw(ctx);
+        turret.Update();
+    }
+
+    setInterval(GameLoop, TimeInterval);
+</script>
+</body>
+</html>
